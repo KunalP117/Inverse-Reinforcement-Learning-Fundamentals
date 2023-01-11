@@ -2,6 +2,8 @@
 Implementation of Andrew Ng's seminal IRL paper's feasibility based results (https://ai.stanford.edu/~ang/papers/icml00-irl.pdf)
 for recovering an MDP's rewards given its optimal policy \pi*. 
 
+Note: Add "Helper functions" sub-folder to path.
+
 Notation: Number of states - X, Number of actions - A
 
 Showed how regularization can bring down the size of the feasible set by 30% (and increase precision)

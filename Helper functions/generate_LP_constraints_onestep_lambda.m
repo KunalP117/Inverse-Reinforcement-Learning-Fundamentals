@@ -17,9 +17,14 @@ end
 
 A = A/(eye(num_states) - d*P_polopt);
 
-B = vertcat(A + lambda*ones(length(A),1),A);
-A = vertcat(B,A- lambda*ones(length(A),1));
+% generates perturbation values U(-lambda,lambda)
+pert_mat = diag(2*lambda*rand(1,num_states) - lambda);
 
+% B = vertcat(A + lambda*ones(length(A),1),A);
+% A = vertcat(B,A- lambda*ones(length(A),1));
+
+B = vertcat(A*(eye(num_states) + pert_mat),A);
+A = vertcat(B,A*(eye(num_states) - pert_mat));
 
 % sanity check - ensure A*R>= 0
 if min(A*R)<0

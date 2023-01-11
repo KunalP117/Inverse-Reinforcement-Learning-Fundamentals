@@ -27,7 +27,8 @@ all_onestepdeviating_pols = generate_all_onestep_deviating_policies(num_states,n
 num_constraints_onestep = length(all_onestepdeviating_pols); % should be (num_actions-1)*num_states
 
 
-lambda = 0.003;
+lambda = 0.2; % DECIDES regularization for Constraint 4
+
 Constraint_mat_1 = generate_LP_constraints(P,P_polopt,R,d,num_states,num_actions,all_pols,pol_opt,num_constraints);
 Constraint_mat_2 = generate_LP_constraints_valuecomp(P,P_polopt,R,d,num_states,all_pols,pol_opt,num_constraints);
 Constraint_mat_3 = generate_LP_constraints_onestep(P,P_polopt,R,d,num_states,num_actions,pol_opt);
@@ -37,7 +38,7 @@ Constraint_mat_4 = generate_LP_constraints_onestep_lambda(lambda,P,P_polopt,R,d,
 % Constraint_mat_2 = generate_LP_constraints_lambda(lambda,P,P_polopt,R,d,num_states,all_pols,pol_opt,num_constraints);
 
 MAX_SIM_ITER = 10^3;
-normpert = 0.5; % uncertainty in knowledge of reward norm
+normpert = 0.6; % uncertainty in knowledge of reward norm
 
 Feasible_set_1 = zeros(num_states,MAX_SIM_ITER);
 for sim_iter = 1:MAX_SIM_ITER
@@ -98,7 +99,7 @@ if num_states == 3
     % Plot feasible sets for both sets of equations separately
     figure();
     size = 10;
-    size_truer = 200;
+    size_truer = 150;
     color1 = 'red';
     color2 = 'blue';
     color3 = 'magenta';
@@ -110,6 +111,7 @@ if num_states == 3
     xlabel('R(1)');
     ylabel('R(2)');
     zlabel('R(3)');
+    title("Vanilla IRL");
 
     subplot(2,2,2);
     scatter3(Feasible_set_2(1,:),Feasible_set_2(2,:),Feasible_set_2(3,:),size,color2,'filled');
@@ -117,6 +119,7 @@ if num_states == 3
     xlabel('R(1)');
     ylabel('R(2)');
     zlabel('R(3)');
+    title("IRL via VALUE comparison");
     
     subplot(2,2,3);
     scatter3(Feasible_set_3(1,:),Feasible_set_3(2,:),Feasible_set_3(3,:),size,color3,'filled');
@@ -124,11 +127,13 @@ if num_states == 3
     xlabel('R(1)');
     ylabel('R(2)');
     zlabel('R(3)');
+    title("Vanilla IRL for one-state deviating policies");
     
     subplot(2,2,4);
     scatter3(Feasible_set_4(1,:),Feasible_set_4(2,:),Feasible_set_4(3,:),size,color4,'filled');
     hold on; scatter3(R(1),R(2),R(3),size_truer,"black",'filled');
     xlabel('R(1)');
+    title("Regularized Vanilla IRL for one-state deviation policies");
     ylabel('R(2)');
     zlabel('R(3)');
 end
